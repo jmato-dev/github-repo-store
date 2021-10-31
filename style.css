@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+    position: relative;
+    height: 100vh;
+    margin: 0;
+    background-color: #fafafa;
+
+    overflow: hidden;
+}
+.score {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: 2rem;
+
+    color: #4d4d4d;
+    font-family: 'Press Start 2P', sans-serif;
+}
+.game-over {
+    position: absolute;
+    top: 50px;
+    width: 100%;
+
+    opacity: 0;
+
+    color: #676767;
+    font-size: 28px;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Press Start 2P', sans-serif;
+}
+.dino {
+    position: absolute;
+    bottom: 0;
+    width: 60px;
+    height: 60px;
+    background-image: url(./dino.png);
+}
+
+.cactus {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    bottom: 0;
+    background-image: url(./cactus.png);
+}
+
+@keyframes slideright {
+    from {
+        background-position: 70000%;
+    }
+
+    to {
+        background-position: 0;
+    }
+}
+
+.background {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-image: url(./background.png);
+    background-repeat: repeat-x;
+    background-position: 0 100%;
+    animation: slideright 600s infinite linear;
+    width: 100%;
+    height: 200px;
+}
+.background.paused {
+    animation-play-state: paused;
+}
