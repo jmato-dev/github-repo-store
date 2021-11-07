@@ -1,5 +1,3 @@
-var player, playerState = null;
-
 class Picture {
     constructor(id) {
         this._id = id;
@@ -87,18 +85,28 @@ class ButtonSwitch extends Button {
 
 class Video {
     constructor(media) {
-        this._first = true;
         this._media = media;
-        this._cued = false;
         this._id = media.data.video;
 
         this._parent = media._container;
         this._element = this._parent.querySelector('iframe#yt-trailer');
 
-        if (this.state && this._element) {
+        const pr = new Promise((resolve, reject) => {
+            let counter = 0;
+
+            let iid = window.setInterval(() => {
+                if (playerState === 5 || counter++ === 200) {
+                    window.clearInterval(iid);
+
+                    if (playerState === 5) resolve();
+                    else reject();
+                }
+            }, 50);
+        });
+
+        pr.then(() => {
             this.cue(this._id);
-            this._cued = true;
-        }
+        });
     }
 
     get element() {
@@ -131,7 +139,7 @@ class Video {
         if (!this.green())
             return;
 
-        if (this._cued && this._id === this.media.data.video)
+        if (this._id === this.media.data.video)
             return;
         
         this._id = this.media.data.video;
@@ -140,9 +148,6 @@ class Video {
             this.halt()
 
         this.cue(this._id);
-
-        if (!this._cued)
-            this._cued = true;
     }
 
     start() {
@@ -150,31 +155,9 @@ class Video {
 
         if (!this.green()) return;
 
-        if (!this._cued)
-            this.load();
-
         this.visible = true;
         self.play();
         self.media.buttons.play.switch(false);
-
-        if (!this._first)
-            return;
-
-        let state = 0, counter = 0;
-        let iid = window.setInterval(function(){
-            if (playerState === -1) {
-                state = 1;
-            }
-
-            if (state === 1 && playerState === 5) {
-                state = 2;
-                self.play();
-                self._first = false;
-            }
-
-            if (state === 2 || counter++ === 100)
-                window.clearInterval(iid);
-        }, 10);
     }
     halt() {
         this.visible = false;
@@ -315,6 +298,7 @@ class MediaPrincipal {
         return this._buttons;
     }
 }
+
 class Carousel {
     constructor (app) {
         let self = this;
@@ -403,23 +387,3 @@ window.addEventListener('load', event => {
 
     app.media = new MediaPrincipal(id, video, title, description);
 });
-
-
-
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player('yt-trailer', {
-    width: '100vw',
-    events: {
-      'onReady': onPlayerReady,
-      'onStateChange': onPlayerStateChange
-    }
-  });
-}
-
-function onPlayerReady(event) {
-    playerState = player.getPlayerState();
-}
-
-function onPlayerStateChange(event) {
-    playerState = player.getPlayerState();
-}
