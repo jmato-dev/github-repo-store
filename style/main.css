@@ -4,6 +4,7 @@
 :root {
     --vermelho: #e50914;
     --preto: #141414;
+    --branco: #f7f7f7;
     --side-padding: 2rem;
     --nav-element-margin: 3vw;
 }
@@ -132,6 +133,7 @@ header nav a:hover {
     z-index: 2;
 
     font-family: 'Open Sans', sans-serif;
+    transition: opacity 300ms;
 }
 
 .filme-principal .titulo {
@@ -172,11 +174,11 @@ header nav a:hover {
     padding: 14px;
     border-radius: 3px;;
     color: #141414;
-    background-color: #f7f7f7;
+    background-color: var(--branco);
 }
 
 .filme-principal .button-play:hover {
-    color: #f7f7f7;
+    color: var(--branco);
     background-color: var(--vermelho);
 }
 
@@ -186,12 +188,21 @@ header nav a:hover {
 }
 
 .filme-principal .button-play:hover i {
-    color: #f7f7f7;
+    color: var(--branco);
 }
 
 /* carrosel */
 .carrosel-filmes {
     margin-top: 5px;
+    padding: 0 1rem;
+}
+
+.carrosel-filmes h4 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+
+    font-size: 26px;
+    color: var(--branco);
 }
 
 .owl-item:hover {
