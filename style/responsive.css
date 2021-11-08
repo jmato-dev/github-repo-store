@@ -64,7 +64,7 @@
     }
 
     .filme-principal .botao:not(.button-play):hover {
-        color: #f7f7f7;
+        color: var(--branco);
     }
 
     .filme-principal .botao:not(.button-play):hover i {
@@ -73,7 +73,7 @@
 
     .filme-principal .botao:not(.button-play) i {
         margin-bottom: 10px;
-        color: #f7f7f7;
+        color: var(--branco);
     }
 }
 
@@ -144,7 +144,7 @@
 
     .filme-principal .botoes .button-add {
         order: 2;
-        color: #f7f7f7;
+        color: var(--branco);
         background-color: #f7f7f726;
     }
 
@@ -160,7 +160,7 @@
     
     .filme-principal .button-info i,
     .filme-principal .button-info:hover {
-        color: #f7f7f7;
+        color: var(--branco);
     }
 
 
