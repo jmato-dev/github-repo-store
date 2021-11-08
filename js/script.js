@@ -81,6 +81,12 @@ class ButtonSwitch extends Button {
             this.text = this._states.new.text;
         }
     }
+
+    get original() {
+        if (this.text === this._states.original.text)
+            return true;
+        return false;
+    }
 }
 
 class Video {
@@ -95,10 +101,10 @@ class Video {
             let counter = 0;
 
             let iid = window.setInterval(() => {
-                if (playerState === 5 || counter++ === 200) {
+                if (playerState === YT.PlayerState.CUED || counter++ === 200) {
                     window.clearInterval(iid);
 
-                    if (playerState === 5) resolve();
+                    if (playerState === YT.PlayerState.CUED) resolve();
                     else reject();
                 }
             }, 50);
@@ -150,19 +156,71 @@ class Video {
         this.cue(this._id);
     }
 
-    start() {
-        let self = this;
-
-        if (!this.green()) return;
+    start(resume) {
+        if (this.media.info.visible);
+            this.media.info.visible = false;
 
         this.visible = true;
-        self.play();
-        self.media.buttons.play.switch(false);
+        this.media.buttons.play.switch(false);
+
+        if (!resume)
+            player.seekTo(0);
+        if (this.state === YT.PlayerState.PAUSED)
+            this.play();
+
+        const pr = new Promise((resolve, reject) => {
+            const duration = player.playerInfo.duration;
+
+            const iid = window.setInterval(() => {
+                if (playerState === YT.PlayerState.PAUSED || playerState === YT.PlayerState.ENDED || playerState === YT.PlayerState.CUED || player.playerInfo.currentTime > duration) {
+                    window.clearInterval(iid);
+
+                    if (playerState === YT.PlayerState.PAUSED || playerState === YT.PlayerState.ENDED || playerState === YT.PlayerState.CUED) resolve(playerState);
+                    else reject();
+                }
+            }, 50);
+        });
+
+        pr.then((value) => {
+            if (value === YT.PlayerState.PAUSED)
+                this.freeze();
+            else {
+                this.halt();
+            }
+        }).catch(() => {
+            throw new Error('A wicked error...');
+        });
     }
     halt() {
+        if (this.state !== playerState === YT.PlayerState.ENDED)
+            this.stop()
+
         this.visible = false;
-        this.stop()
+
         this.media.buttons.play.switch(true);
+        if (!this.media.info.visible);
+            this.media.info.visible = true;
+    }
+    freeze() {
+        if(playerState !== YT.PlayerState.PAUSED)
+            this.pause();
+
+        if (!this.media.info.visible)
+            this.media.info.visible = true;
+
+        const pr = new Promise((resolve, reject) => {
+            const iid = window.setInterval(() => {
+                if (this.state !== YT.PlayerState.PAUSED){
+                    window.clearInterval(iid);
+                    resolve(this.state);
+                }
+            }, 50);
+        });
+
+        pr.then((state) => {
+            if (state === YT.PlayerState.PLAYING)
+                this.start(true);
+        });
     }
     cue(value) {
         player.cueVideoById(value);
@@ -171,7 +229,10 @@ class Video {
         player.playVideo();
     }
     stop() {
-        player.stopVideo()
+        player.stopVideo();
+    }
+    pause() {
+        player.pauseVideo();
     }
     green() {
         // alguma coisa deu errada
@@ -207,21 +268,40 @@ class MediaPrincipal {
 
         this._video = new Video(this);
 
-        this._info = this._container.querySelector('.info-container');
-        this._title = this._info.querySelector('.titulo');
-        this._description = this._info.querySelector('.descricao');
+        this._info = {
+            element: this._container.querySelector('.info-container')
+        };
+        Object.defineProperty(this._info, 'visible', {
+            get: function() {
+                return this.element.style.opacity === '0' ? false : true;
+            },
+            set: function(value) {
+                if (value && this.element.style.opacity === '0') {
+                    this.element.style.display = 'flex';
+                    this.element.style.opacity = '';
+                }
+                else if (!value && this.element.style.opacity === '') {
+                    this.element.style.opacity = '0';
+                    window.setTimeout(() => {
+                        this.element.style.display = 'none';
+                    }, 300);
+                }
+            }
+        })
+
+        this._title = this._info.element.querySelector('.titulo');
+        this._description = this._info.element.querySelector('.descricao');
 
         this.setData(this._data.id, this._data.video, this._data.title, this._data.description);
 
         this._buttons = {};
-        this.buttons.play = new ButtonSwitch(this._info, '.button-play', {class: 'fa-stop', text: 'DETENER TRAILER'});
-
+        this.buttons.play = new ButtonSwitch(this._info.element, '.button-play', {class: 'fa-stop', text: 'DETENER TRAILER'});
 
         this.buttons.play.button.addEventListener('click', function(event) {
-            if (self._video.visible)
-                self._video.halt();
+            if (self.buttons.play.original)
+                self._video.start(false);
             else
-                self._video.start();
+                self._video.halt();
         });
     }
 
@@ -281,6 +361,10 @@ class MediaPrincipal {
     get description() {
         return this._description;
     }
+    get info() {
+        return this._info;
+    }
+
     getTitle() {
         return this.title.textContent;
     }
