@@ -12,16 +12,17 @@ Nesta encarnação utiliza a API do player de Youtube para assistir os trailers 
 
 Se melhorou a responsividade geral do projeto. 
 
-A possibilidade de selecionar os filmes desde o carrossel para assim ver refletida a escolha na secção principal.
+A possibilidade de selecionar os filmes desde o carrossel para assim ver refletida a escolha na seção principal.
 
-A possibilidade de assistir os trailers dos filmes ou series dentro da secção principal.
+A possibilidade de assistir os trailers dos filmes ou series dentro da seção principal.
 
 
 
 #### Algumas notas
 
-Utiliza o elemento HTML <picture> para a responsividade das imagens.
+Utiliza o elemento HTML ***picture*** para a responsividade das imágens.
 
-Os vídeos são solicitados a demanda do usuário utilizando a API JavaScript Iframe do site Youtube.
+Os vídeos são solicitados sob demanda utilizando a API JavaScript IFrame do site Youtube.
 
-As imagens e descrições dos filmes e series são copiados do site de [The Movie Database](https://www.themoviedb.org/)
+As imagens e descrições dos filmes e series são copiados do site [The Movie Database](https://www.themoviedb.org/)
+
