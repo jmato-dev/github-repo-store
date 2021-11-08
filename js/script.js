@@ -139,12 +139,8 @@ class Video {
     get media() {
         return this._media;
     }
-    // set the id and cue the video
-    load() {
-        // algo deu errado
-        if (!this.green())
-            return;
 
+    load() {
         if (this._id === this.media.data.video)
             return;
         
@@ -234,21 +230,6 @@ class Video {
     pause() {
         player.pauseVideo();
     }
-    green() {
-        // alguma coisa deu errada
-        if (!this.state)
-            return false;
-
-        // ver se o elemento esta presente agora
-        if (!this.element && this._parent.querySelector('iframe#yt-trailer'))
-            this._element = this._parent.querySelector('iframe#yt-trailer');
-
-        // algo deu errado
-        if (!this._element)
-            return false;
-
-        return true;
-    }
 }
 
 class MediaPrincipal {
@@ -287,7 +268,7 @@ class MediaPrincipal {
                     }, 300);
                 }
             }
-        })
+        });
 
         this._title = this._info.element.querySelector('.titulo');
         this._description = this._info.element.querySelector('.descricao');
@@ -364,6 +345,9 @@ class MediaPrincipal {
     get info() {
         return this._info;
     }
+    get buttons() {
+        return this._buttons;
+    }
 
     getTitle() {
         return this.title.textContent;
@@ -376,10 +360,6 @@ class MediaPrincipal {
     }
     setDescription() {
         this.description.textContent = this.data.description;
-    }
-
-    get buttons() {
-        return this._buttons;
     }
 }
 
