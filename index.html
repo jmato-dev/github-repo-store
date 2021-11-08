@@ -57,7 +57,7 @@
         </div>
 
         <div class="carrosel-filmes">
-            <h4>Em alta</h4>
+            <h4>Popular em Trailflix</h4>
             <div class="owl-carousel owl-theme">
                 <div class="item box-filme"><img src="./img/46648/480-portrait.jpg" alt="" data-id="46648" data-video="8Wm9bLXRIw0" data-title="True Detective" data-description="A primeira temporada conta a história de como a vida de dois detetives, Rust Cohle (Matthew McConaughey) e Martin Hart (Woody Harrelson), colidem e se entrelaçam durante uma caçada de 17 anos por um serial killer em Louisiana. A investigação de um assassinato bizarro, em 1995, leva á reabertura do caso em 2012."></div>
                 <div class="item box-filme"><img src="./img/93740/480-portrait.jpg" alt="" data-id="93740" data-video="X4QYV5GTz7c" data-title="Foundation" data-description="Inspirada nas obras de romance de Isaac Asimov, Foundation retrata a épica jornada espacial de um grupo de exilados tentando salvar a humanidade durante a queda do Império Galáctico."></div>
@@ -76,8 +76,6 @@
 
     <script>
         var player, playerState = null;
-
-        // 2. This code loads the IFrame Player API code asynchronously.
         var tag = document.createElement('script');
   
         tag.src = "https://www.youtube.com/iframe_api";
@@ -92,17 +90,17 @@
                 'onStateChange': onPlayerStateChange
                 }
             });
-            }
+        }
 
-            function onPlayerReady(event) {
-                playerState = player.getPlayerState();
-                console.log('playerReady', playerState);
-            }
+        function onPlayerReady(event) {
+            playerState = player.getPlayerState();
+            // console.log('playerReady', playerState);
+        }
 
-            function onPlayerStateChange(event) {
-                playerState = player.getPlayerState();
-                console.log ('state change', playerState);
-            }
+        function onPlayerStateChange(event) {
+            playerState = player.getPlayerState();
+            // console.log ('state change', playerState);
+        }
     </script>
 
     <script src="https://kit.fontawesome.com/70429b1bcd.js" crossorigin="anonymous"></script>
