@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Skeleton from '../Skeleton';
 
-const Card = styled.div`
+const Card = styled.div `
   display: flex;
   justify-content: center;
   width: 90px;
